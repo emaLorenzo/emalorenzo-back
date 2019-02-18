@@ -14,6 +14,14 @@ type createRolePayload {
   role: UsersPermissionsRole
 }
 
+input createTecnologiesInput {
+  data: TecnologiesInput
+}
+
+type createTecnologiesPayload {
+  tecnology: Tecnologies
+}
+
 input createUserInput {
   data: UserInput
 }
@@ -41,6 +49,14 @@ input deleteRoleInput {
 
 type deleteRolePayload {
   role: UsersPermissionsRole
+}
+
+input deleteTecnologiesInput {
+  where: InputID
+}
+
+type deleteTecnologiesPayload {
+  tecnology: Tecnologies
 }
 
 input deleteUserInput {
@@ -72,12 +88,15 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
-union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Project | createProjectPayload | updateProjectPayload | deleteProjectPayload | ProjectConnection | ProjectAggregator | ProjectGroupBy | ProjectConnection_id | ProjectConnectionCreatedAt | ProjectConnectionUpdatedAt | ProjectConnectionName | ProjectConnectionFecha | ProjectConnectionTecnologies | ProjectConnectionDescription | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Project | createProjectPayload | updateProjectPayload | deleteProjectPayload | ProjectConnection | ProjectAggregator | ProjectGroupBy | ProjectConnection_id | ProjectConnectionCreatedAt | ProjectConnectionUpdatedAt | ProjectConnectionName | ProjectConnectionFecha | ProjectConnectionTecnologies | ProjectConnectionDescription | Tecnologies | createTecnologiesPayload | updateTecnologiesPayload | deleteTecnologiesPayload | TecnologiesConnection | TecnologiesAggregator | TecnologiesGroupBy | TecnologiesConnection_id | TecnologiesConnectionCreatedAt | TecnologiesConnectionUpdatedAt | TecnologiesConnectionName | TecnologiesConnectionIcon | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
 
 type Mutation {
   createProject(input: createProjectInput): createProjectPayload
   updateProject(input: updateProjectInput): updateProjectPayload
   deleteProject(input: deleteProjectInput): deleteProjectPayload
+  createTecnologies(input: createTecnologiesInput): createTecnologiesPayload
+  updateTecnologies(input: updateTecnologiesInput): updateTecnologiesPayload
+  deleteTecnologies(input: deleteTecnologiesInput): deleteTecnologiesPayload
 
   """Create a new role"""
   createRole(input: createRoleInput): createRolePayload
@@ -170,6 +189,9 @@ type Query {
   project(id: ID!): Project
   projects(sort: String, limit: Int, start: Int, where: JSON): [Project]
   projectsConnection(sort: String, limit: Int, start: Int, where: JSON): ProjectConnection
+  tecnology(id: ID!): Tecnologies
+  tecnologies(sort: String, limit: Int, start: Int, where: JSON): [Tecnologies]
+  tecnologiesConnection(sort: String, limit: Int, start: Int, where: JSON): TecnologiesConnection
   files(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
   filesConnection(sort: String, limit: Int, start: Int, where: JSON): UploadFileConnection
   role(id: ID!): UsersPermissionsRole
@@ -199,6 +221,62 @@ enum tecnologies {
   c
 }
 
+type Tecnologies {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  Name: String!
+  Icon: UploadFile
+}
+
+type TecnologiesAggregator {
+  count: Int
+}
+
+type TecnologiesConnection {
+  values: [Tecnologies]
+  groupBy: TecnologiesGroupBy
+  aggregate: TecnologiesAggregator
+}
+
+type TecnologiesConnection_id {
+  key: ID
+  connection: TecnologiesConnection
+}
+
+type TecnologiesConnectionCreatedAt {
+  key: DateTime
+  connection: TecnologiesConnection
+}
+
+type TecnologiesConnectionIcon {
+  key: ID
+  connection: TecnologiesConnection
+}
+
+type TecnologiesConnectionName {
+  key: String
+  connection: TecnologiesConnection
+}
+
+type TecnologiesConnectionUpdatedAt {
+  key: DateTime
+  connection: TecnologiesConnection
+}
+
+type TecnologiesGroupBy {
+  _id: [TecnologiesConnection_id]
+  createdAt: [TecnologiesConnectionCreatedAt]
+  updatedAt: [TecnologiesConnectionUpdatedAt]
+  Name: [TecnologiesConnectionName]
+  Icon: [TecnologiesConnectionIcon]
+}
+
+input TecnologiesInput {
+  Name: String!
+  Icon: ID
+}
+
 input updateProjectInput {
   where: InputID
   data: ProjectInput
@@ -215,6 +293,15 @@ input updateRoleInput {
 
 type updateRolePayload {
   role: UsersPermissionsRole
+}
+
+input updateTecnologiesInput {
+  where: InputID
+  data: TecnologiesInput
+}
+
+type updateTecnologiesPayload {
+  tecnology: Tecnologies
 }
 
 input updateUserInput {
