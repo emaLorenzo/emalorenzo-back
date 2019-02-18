@@ -1,3 +1,11 @@
+input createImageInput {
+  data: ImageInput
+}
+
+type createImagePayload {
+  image: Image
+}
+
 input createProjectInput {
   data: ProjectInput
 }
@@ -42,6 +50,14 @@ type createUserPayload {
 The `DateTime` scalar represents a date and time following the ISO 8601 standard
 """
 scalar DateTime
+
+input deleteImageInput {
+  where: InputID
+}
+
+type deleteImagePayload {
+  image: Image
+}
 
 input deleteProjectInput {
   where: InputID
@@ -95,6 +111,48 @@ input FileInput {
   related: [ID]
 }
 
+type Image {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  Images(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+}
+
+type ImageAggregator {
+  count: Int
+}
+
+type ImageConnection {
+  values: [Image]
+  groupBy: ImageGroupBy
+  aggregate: ImageAggregator
+}
+
+type ImageConnection_id {
+  key: ID
+  connection: ImageConnection
+}
+
+type ImageConnectionCreatedAt {
+  key: DateTime
+  connection: ImageConnection
+}
+
+type ImageConnectionUpdatedAt {
+  key: DateTime
+  connection: ImageConnection
+}
+
+type ImageGroupBy {
+  _id: [ImageConnection_id]
+  createdAt: [ImageConnectionCreatedAt]
+  updatedAt: [ImageConnectionUpdatedAt]
+}
+
+input ImageInput {
+  Images: [ID]
+}
+
 input InputID {
   id: ID!
 }
@@ -104,9 +162,12 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
-union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Project | createProjectPayload | updateProjectPayload | deleteProjectPayload | ProjectConnection | ProjectAggregator | ProjectGroupBy | ProjectConnection_id | ProjectConnectionCreatedAt | ProjectConnectionUpdatedAt | ProjectConnectionName | ProjectConnectionFecha | ProjectConnectionTecnologies | ProjectConnectionDescription | Sections | createSectionsPayload | updateSectionsPayload | deleteSectionsPayload | SectionsConnection | SectionsAggregator | SectionsGroupBy | SectionsConnection_id | SectionsConnectionCreatedAt | SectionsConnectionUpdatedAt | SectionsConnectionName | SectionsConnectionText | Tecnologies | createTecnologiesPayload | updateTecnologiesPayload | deleteTecnologiesPayload | TecnologiesConnection | TecnologiesAggregator | TecnologiesGroupBy | TecnologiesConnection_id | TecnologiesConnectionCreatedAt | TecnologiesConnectionUpdatedAt | TecnologiesConnectionName | TecnologiesConnectionIcon | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Image | createImagePayload | updateImagePayload | deleteImagePayload | ImageConnection | ImageAggregator | ImageGroupBy | ImageConnection_id | ImageConnectionCreatedAt | ImageConnectionUpdatedAt | Project | createProjectPayload | updateProjectPayload | deleteProjectPayload | ProjectConnection | ProjectAggregator | ProjectGroupBy | ProjectConnection_id | ProjectConnectionCreatedAt | ProjectConnectionUpdatedAt | ProjectConnectionName | ProjectConnectionFecha | ProjectConnectionTecnologies | ProjectConnectionDescription | Sections | createSectionsPayload | updateSectionsPayload | deleteSectionsPayload | SectionsConnection | SectionsAggregator | SectionsGroupBy | SectionsConnection_id | SectionsConnectionCreatedAt | SectionsConnectionUpdatedAt | SectionsConnectionName | SectionsConnectionText | Tecnologies | createTecnologiesPayload | updateTecnologiesPayload | deleteTecnologiesPayload | TecnologiesConnection | TecnologiesAggregator | TecnologiesGroupBy | TecnologiesConnection_id | TecnologiesConnectionCreatedAt | TecnologiesConnectionUpdatedAt | TecnologiesConnectionName | TecnologiesConnectionIcon | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
 
 type Mutation {
+  createImage(input: createImageInput): createImagePayload
+  updateImage(input: updateImageInput): updateImagePayload
+  deleteImage(input: deleteImageInput): deleteImagePayload
   createProject(input: createProjectInput): createProjectPayload
   updateProject(input: updateProjectInput): updateProjectPayload
   deleteProject(input: deleteProjectInput): deleteProjectPayload
@@ -205,6 +266,9 @@ input ProjectInput {
 }
 
 type Query {
+  image(id: ID!): Image
+  images(sort: String, limit: Int, start: Int, where: JSON): [Image]
+  imagesConnection(sort: String, limit: Int, start: Int, where: JSON): ImageConnection
   project(id: ID!): Project
   projects(sort: String, limit: Int, start: Int, where: JSON): [Project]
   projectsConnection(sort: String, limit: Int, start: Int, where: JSON): ProjectConnection
@@ -353,6 +417,15 @@ type TecnologiesGroupBy {
 input TecnologiesInput {
   Name: String!
   Icon: ID
+}
+
+input updateImageInput {
+  where: InputID
+  data: ImageInput
+}
+
+type updateImagePayload {
+  image: Image
 }
 
 input updateProjectInput {

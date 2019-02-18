@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "emalorenzo-api",
+  "builds": [
+      { "src": "*.js", "use": "@now/node" }
+  ]
+}
