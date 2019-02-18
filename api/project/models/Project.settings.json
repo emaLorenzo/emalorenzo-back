@@ -1,0 +1,38 @@
+{
+  "connection": "default",
+  "collectionName": "",
+  "info": {
+    "name": "project",
+    "description": "Projects i've been working on"
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "Name": {
+      "default": "",
+      "unique": true,
+      "type": "string",
+      "required": true
+    },
+    "Fecha": {
+      "default": "",
+      "type": "date"
+    },
+    "Tecnologies": {
+      "default": "",
+      "enumName": "tecnologies",
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "a",
+        " b",
+        " c"
+      ]
+    },
+    "Description": {
+      "default": "",
+      "type": "text"
+    }
+  }
+}
